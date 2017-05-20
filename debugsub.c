@@ -77,7 +77,7 @@ static const OEMCHAR str_picstat[] = 								\
 				OEMTEXT("8255PORTC = %.2x / system-port = %.2x");
 
 
-const OEMCHAR *debugsub_flags(UINT16 flag) {
+const OEMCHAR *debugsub_flags1(UINT16 flag) {
 
 static OEMCHAR	work[128];
 	int			i;
@@ -100,7 +100,7 @@ static OEMCHAR	work[128];
 	return(work);
 }
 
-const OEMCHAR *debugsub_regs(void) {
+const OEMCHAR *debugsub_regs1(void) {
 
 static OEMCHAR	work[256];
 
@@ -134,7 +134,7 @@ static void writeseg(const OEMCHAR *fname, UINT32 addr, UINT limit) {
 	file_close(fh);
 }
 
-void debugsub_status(void) {
+void debugsub_status1(void) {
 
 static int		filenum = 0;
 	TEXTFILEH	tfh;
@@ -165,7 +165,7 @@ const OEMCHAR	*p;
 	filenum++;
 }
 
-void debugsub_memorydump(void) {
+void debugsub_memorydump1(void) {
 
 	FILEH	fh;
 	int		i;

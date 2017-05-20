@@ -76,6 +76,8 @@ void retro_set_audio_sample_batch(retro_audio_sample_batch_t cb) { audio_batch_c
 void retro_set_input_poll(retro_input_poll_t cb) { input_poll_cb = cb; }
 void retro_set_input_state(retro_input_state_t cb) { input_state_cb = cb; }
 
+#include <sys/time.h>
+
 long GetTicks(void)
 { // in MSec
 #ifndef _ANDROID_

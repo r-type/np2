@@ -3,14 +3,15 @@
 
 typedef FILE *				FILEH;
 #define	FILEH_INVALID		NULL
-
+/*
 #if defined(WIN32)
 #define	FLISTH				HANDLE
 #define	FLISTH_INVALID		(INVALID_HANDLE_VALUE)
 #else
+*/
 #define	FLISTH				long
 #define	FLISTH_INVALID		0
-#endif
+//#endif
 
 #define	FSEEK_SET	SEEK_SET
 #define	FSEEK_CUR	SEEK_CUR

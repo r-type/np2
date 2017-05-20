@@ -5,7 +5,7 @@
 #include "codecnv/codecnv.h"
 #endif
 #include "dosio.h"
-#if defined(WIN32)
+#if defined(WIN32) && !defined(__LIBRETRO__)
 #include <direct.h>
 #else
 #include <dirent.h>
@@ -234,7 +234,7 @@ short file_attr_c(const char *path) {
 	return(file_attr(curpath));
 }
 
-#if defined(WIN32)
+#if defined(WIN32) && !defined(__LIBRETRO__)
 static BRESULT cnvdatetime(FILETIME *file, DOSDATE *dosdate, DOSTIME *dostime) {
 
 	FILETIME	localtime;
@@ -347,11 +347,15 @@ struct stat		sb;
 	if (fli) {
 		memset(fli, 0, sizeof(*fli));
 		fli->caps = FLICAPS_ATTR;
-		fli->attr = (de->d_type & DT_DIR) ? FILEATTR_DIRECTORY : 0;
+//		fli->attr = (de->d_type & DT_DIR) ? FILEATTR_DIRECTORY : 0;
+		fli->attr = /*(de->d_type & DT_DIR) ? FILEATTR_DIRECTORY :*/ 0;
 
 		if (stat(de->d_name, &sb) == 0) {
 			fli->caps |= FLICAPS_SIZE;
 			fli->size = (UINT)sb.st_size;
+			if (S_ISDIR(sb.st_mode)) {
+				fli->attr |= FILEATTR_DIRECTORY;
+			}
 			if (!(sb.st_mode & S_IWUSR)) {
 				fli->attr |= FILEATTR_READONLY;
 			}

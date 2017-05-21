@@ -1,262 +1,261 @@
 
-// ---- ’è‹`
+// ---- Definition
 
-  Å“K‰»‚Ìˆ×‚Ìƒƒ‚ƒŠg—p—Ê‚Ì—}§
-    MEMOPTIMIZE = 0`2
+  Control to optimize the memory amount used.
+    MEMOPTIMIZE = 0ï½2
 
-    CPU‚É‚æ‚èˆÈ‰º‚Ì”’l‚ğƒZƒbƒg‚³‚ê‚é‚±‚Æ‚ğŠú‘Ò‚µ‚Ä‚¢‚é
-      MEMOPTIMIZE–¢’è‹` c Celeron333AˆÈ~‚ÌƒZƒJƒ“ƒhƒLƒƒƒbƒVƒ…—LŒø‹@
-      MEMOPTIMIZE = 0   c x86
-      MEMOPTIMIZE = 1   c PowerPC“™‚ÌƒfƒXƒNƒgƒbƒv—pRISC
-      MEMOPTIMIZE = 2   c StrongARM“™‚Ì‘g‚İ‚İ—pRISC
-
-
-  ƒRƒ“ƒpƒCƒ‰‚Ìˆø‚«”E–ß‚è’l‚ÌÅ“K‰»
-    ˆø‚«”E–ß‚è’l‚ÅintŒ^ˆÈŠO‚ğw’è‚µ‚½ê‡‚ÉAÅ“K‰»‚ª—LŒø‚É“­‚©‚È‚¢
-    ƒRƒ“ƒpƒCƒ‰Œü‚¯‚Ì’è‹`‚Å‚·B
-    ’Êí‚Í common.h ‚Ì•¨‚ğg—p‚µ‚Ü‚·B
-      REG8 c UINT8Œ^ / (sizeof(REG8) != 1)‚Ìê‡ ãˆÊƒrƒbƒg‚ğ0fill‚·‚é–
-      REG16 c UINT16Œ^ / (sizeof(REG16) != 2)‚Ìê‡ ãˆÊƒrƒbƒg‚ğ0fill‚·‚é–
-@@@‚¢‚¸‚ê‚à’l‚ğƒZƒbƒg‚·‚é‘¤‚ª0fill‚µAQÆ‘¤‚Í0fill‚µ‚½‚à‚Ì‚ÆŒ©‚È‚µ‚Ü‚·B
+    We're expecting the CPU to stay in the limit specified here.
+      MEMOPTIMIZE Undefined â€¦ Celeron333A along with its second cache activated.
+      MEMOPTIMIZE = 0   â€¦ x86
+      MEMOPTIMIZE = 1   â€¦ PowerPC and other RISC desktop.
+      MEMOPTIMIZE = 2   â€¦ StrongARM and other RISC embedded.
 
 
-  OS‚ÌŒ¾Œê‚Ì‘I‘ğ
-    OSLANG_SJIS c Shift-JIS‚ÌŠ¿šƒR[ƒh‚ğ‰ğß‚·‚é
-    OSLANG_EUC  c EUC‚ÌŠ¿šƒR[ƒh‚ğ‰ğß‚·‚é
-
-    OSLINEBREAK_CR   c MacOS   "\r"
-    OSLINEBREAK_LF   c Unix    "\n"
-    OSLINEBREAK_CRLF c Windows "\r\n"
-
-      ¦Œ»İ‚ÍˆÈ‰º‚Ìƒ\[ƒXƒR[ƒh“à‚ÅŒÂ•Ê‚Éİ’è‚µ‚Ä‚¢‚Ü‚·B
-        (Windows‚ª API‚É‚æ‚Á‚Ä \r\n‚Ìê‡‚Æ\n‚Ìê‡‚ª‚ ‚é‚Ì‚Åc)
-        Ecommon/_memory.c
-        Edebugsub.c
-        Estatsave.c
-
-    (milstr.h‘I‘ğ—p)
-    SUPPORT_ANK      c ANK•¶š—ñ‘€ìŠÖ”‚ğƒŠƒ“ƒN‚·‚é
-    SUPPORT_SJIS     c SJIS•¶š—ñ‘€ìŠÖ”‚ğƒŠƒ“ƒN‚·‚é
-    SUPPORT_EUC      c EUC•¶š—ñ‘€ìŠÖ”‚ğƒŠƒ“ƒN‚·‚é
-
-      ¦Œ»İmilstr.h‚Å‚·‚×‚Ä’è‹`‚³‚ê‚½‚Ü‚Ü‚É‚È‚Á‚Ä‚¢‚Ü‚·B
-        ver0.73‚Åmilstr.h‚Ì’è‹`‚ğŠO‚µ compiler.h‚Åw’è‚µ‚½•¨‚Æ‚È‚è‚Ü‚·B
+  Compiler arguments - Return values optimization
+    If argument return values aren't using int, it cannot work effectively. 
+    We generally use common.h.
+      REG8 â€¦ UINT8 type / (sizeof(REG8) != 1)In that case we fill the superior bit with 0.
+      REG16 â€¦ UINT16 type / (sizeof(REG16) != 2)In that case we fill the superior bit with 0.
+ã€€ã€€ã€€As we filled both values with 0, we'll consider doing the same when browsing.
 
 
-@CPUCORE_IA32
-@@IA32ƒA[ƒLƒeƒNƒ`ƒƒ‚ğÌ—p
-@@@i386c‚ğg—p‚·‚éê‡‚Ì’ˆÓ“_
-@@  ECPU panic ‚âŒx•\¦‚É msgbox() ‚Æ‚¢‚¤ API ‚ğg—p‚µ‚Ü‚·B
-@@@@compiler.h ‚ ‚½‚è‚Å“K“–‚É’è‹`‚µ‚Ä‚­‚¾‚³‚¢B
-@@@Esigsetjmp(3), siglongjmp(3) ‚ª–³‚¢ƒA[ƒLƒeƒNƒ`ƒƒ‚ÍˆÈ‰º‚Ì define ‚ğ
-@@@@compiler.h ‚ ‚½‚è‚É’Ç‰Á‚µ‚Ä‚­‚¾‚³‚¢B
-@@@@----------------------------------------------------------------------
+  OS language selection.
+    OSLANG_SJIS â€¦ Interpret Kanji code as Shift-JIS.
+    OSLANG_EUC  â€¦ Interpret Kanji code as EUC.
+
+    OSLINEBREAK_CR   â€¦ MacOS   "\r"
+    OSLINEBREAK_LF   â€¦ Unix    "\n"
+    OSLINEBREAK_CRLF â€¦ Windows "\r\n"
+
+      â€»Here we do particular case settings in the source code bellow.
+        (Because of Windows API, there are \r\n cases along \n cases...)
+        ãƒ»common/_memory.c
+        ãƒ»debugsub.c
+        ãƒ»statsave.c
+
+    (milstr.h choice selection)
+    SUPPORT_ANK      â€¦ ANK Character string processing function link.
+    SUPPORT_SJIS     â€¦ SJIS Character string processing function link.
+    SUPPORT_EUC      â€¦ EUC Character string processing function link.
+
+      â€»That's all we are setting in milstr.h at the moment.
+        As ver0.73 we removed some definitions from milstr.h to place them into compiler.h.
+
+
+ã€€CPUCORE_IA32
+ã€€ã€€IA32 architecture is used.
+ã€€ã€€ã€€Important notes when using i386c.
+ã€€ã€€  ãƒ»CPU panic and other warning indication make use of msgbox() API.
+ã€€ã€€ã€€ã€€Make the proper matched definition with compiler.h.
+ã€€ã€€ã€€ãƒ»Architectures that don't handle sigsetjmp(3), siglongjmp(3) should use the following list of define
+    and add them to compiler.h.
+ã€€ã€€ã€€ã€€----------------------------------------------------------------------
         #define sigjmp_buf              jmp_buf
         #define sigsetjmp(env, mask)    setjmp(env)
         #define siglongjmp(env, val)    longjmp(env, val)
-@@@@----------------------------------------------------------------------
+ã€€ã€€ã€€ã€€----------------------------------------------------------------------
 
   CPUSTRUC_MEMWAIT
-@@@cpucore\‘¢‘Ì‚Éƒƒ‚ƒŠƒEƒFƒCƒg’l‚ğˆÚ“®‚·‚é(vramop)
+ã€€ã€€ã€€We move to cpucore structure at the cost of memory wait (vramop).
 
-@SUPPORT_CRT15KHZ
-@@@…•½‘–¸15.98kHz‚ğƒTƒ|[ƒg‚·‚é(DIPSW1-1)
+ã€€SUPPORT_CRT15KHZ
+ã€€ã€€ã€€15.98kHz horizontal scan support (DIPSW1-1).
 
-@SUPPORT_CRT31KHZ
-@@@…•½‘–¸31.47kHz‚ğƒTƒ|[ƒg‚·‚é
-@@@Fellowƒ^ƒCƒv‚Í‚±‚ê
+ã€€SUPPORT_CRT31KHZ
+ã€€ã€€ã€€31.47kHz horizontal scan support.
+ã€€ã€€ã€€This is "Fellow" type.
 
-@SUPPORT_PC9821
-@@@PC-9821Šg’£‚ÌƒTƒ|[ƒg
-@@@“–‘R‚Å‚·‚ª 386•K{‚Å‚·B
-@@@‚Ü‚½ SUPPORT_CRT31KHZ‚à•K—v‚Å‚·(ƒnƒCƒŒƒ]BIOS‚ğg—p‚·‚éˆ×)
+ã€€SUPPORT_PC9821
+ã€€ã€€ã€€PC-9821 expansion support.
+ã€€ã€€ã€€It's evident that 386 is required.
+ã€€ã€€ã€€Also SUPPORT_CRT31KHZ is needed as well (to support High-Res BIOS).
 
-@SUPPORT_PC9861K
-@@@PC-9861K(RS-232CŠg’£I/F)‚ğƒTƒ|[ƒg
+ã€€SUPPORT_PC9861K
+ã€€ã€€ã€€PC-9861K(RS-232C expansion I/F) support.
 
-@SUPPORT_IDEIO
-@@@IDE‚Ì I/OƒŒƒxƒ‹‚Å‚ÌƒTƒ|[ƒg
-@@@‚Å‚à ATA‚ÌƒŠ[ƒh’ö“x‚µ‚©‚Å‚«‚È‚¢c
+ã€€SUPPORT_IDEIO
+ã€€ã€€ã€€Support for IDE at I/O level.
+ã€€ã€€ã€€But we can only establish an ATA lead...
 
-@SUPPORT_SASI
-@@@SASI HDD‚ğƒTƒ|[ƒg
-@@@’è‹`‚ª‚È‚¯‚ê‚ÎíIDE‚Æ‚µ‚Äì“®‚µ‚Ü‚·B
+ã€€SUPPORT_SASI
+ã€€ã€€ã€€SASI HDD support.
+ã€€ã€€ã€€If it's not defined it will run as IDE.
 
-@SUPPORT_SCSI
-@@@SCSI HDD‚ğƒTƒ|[ƒgc‘S‘R“®‚©‚È‚¢
+ã€€SUPPORT_SCSI
+ã€€ã€€ã€€SCSI HDD support... not working completely.
 
-@SUPPORT_S98
-@@@S98ƒƒO‚ğæ“¾
+ã€€SUPPORT_S98
+ã€€ã€€ã€€Gain S98 log.
 
-@SUPPORT_WAVEREC
-@@SoundƒŒƒxƒ‹‚Å waveƒtƒ@ƒCƒ‹‚Ì‘‚«o‚µŠÖ”‚ğƒTƒ|[ƒg
-@@’A‚µ‘‚«o‚µ’†‚Í ƒTƒEƒ“ƒho—Í‚ª~‚Ü‚é‚Ì‚Å@‚Ù‚ÚƒfƒoƒO—p
+ã€€SUPPORT_WAVEREC
+ã€€ã€€Wave file writing support at Sound level.
+ã€€ã€€Be advised sound will stop when in use, mostly used for debugging.
 
 
 // ---- screen
 
-  PC-9801ƒVƒŠ[ƒY‚Ì‰æ–ÊƒTƒCƒY‚Í•W€‚Å 641x400B
-  VGA‚Å‚Íû‚Ü‚ç‚È‚¢‚Ì‚Å ‹­§“I‚ÉVGA‚Éû‚ß‚éˆ×‚É ‰æ–Ê‰¡ƒTƒCƒY‚Í width + extend
-‚Æ‚·‚éB
+  PC-9801 series screen standard resolution is 641x400.
+  It's not in conformity with VGA but to make it compliant we force it to width + extend.
   8 < width < 640
   8 < height < 480
   extend = 0 or 1
 
 typedef struct {
-	BYTE	*ptr;		// VRAMƒ|ƒCƒ“ƒ^
-	int		xalign;		// x•ûŒüƒIƒtƒZƒbƒg
-	int		yalign;		// y•ûŒüƒIƒtƒZƒbƒg
-	int		width;		// ‰¡•
-	int		height;		// c•
-	UINT	bpp;		// ƒXƒNƒŠ[ƒ“Fƒrƒbƒg
-	int		extend;		// •Šg’£
+	BYTE	*ptr;		// VRAM pointer
+	int		xalign;		// x direction offset
+	int		yalign;		// y direction offset
+	int		width;
+	int		height;
+	UINT	bpp;		// screen bit color
+	int		extend;		// width extension
 } SCRNSURF;
 
-  ƒT[ƒtƒFƒXƒTƒCƒY‚Í (width + extern) x heightB
+  Surface size is (width + extern) x height.
 
 
 const SCRNSURF *scrnmng_surflock(void);
-  ‰æ–Ê•`‰æŠJn
+  Start screen drawing.
 
 void scrnmng_surfunlock(const SCRNSURF *surf);
-  ‰æ–Ê•`‰æI—¹(‚±‚Ìƒ^ƒCƒ~ƒ“ƒO‚Å•`‰æ)
+  End screen drawing (draw with that timing).
 
 
 void scrnmng_setwidth(int posx, int width)
 void scrnmng_setextend(int extend)
 void scrnmng_setheight(int posy, int height)
-  •`‰æƒTƒCƒY‚Ì•ÏX
-  ƒEƒBƒ“ƒhƒEƒTƒCƒY‚Ì•ÏX‚·‚é
-  ƒtƒ‹ƒXƒNƒŠ[ƒ“’†‚Å‚ ‚ê‚Î •\¦—Ìˆæ‚ğ•ÏXB
-  SCRNSURF‚Å‚Í‚±‚Ì’l‚ğ•Ô‚·‚æ‚¤‚É‚·‚é
-  posx, width‚Í 8‚Ì”{”
+  Screen size change.
+  Window size change.
+  If in Fullscreen, display area will change.
+  We return this value with SCRNSURF. (?)
+  posx, width are 8 multiples.
 
-BOOL scrnmng_isfullscreen(void) c NP2ƒRƒA‚Å‚Í–¢g—p
-  ƒtƒ‹ƒXƒNƒŠ[ƒ“ó‘Ô‚Ìæ“¾
-    return: ”ñ0‚Åƒtƒ‹ƒXƒNƒŠ[ƒ“
+BOOL scrnmng_isfullscreen(void) â€¦ Unused in NP2 core.
+  Get fullscreen status.
+    return: if not zero, is fullscreen.
 
 BOOL scrnmng_haveextend(void)
-  ‰¡•ó‘Ô‚Ìæ“¾
-    return: ”ñ0‚Å ‰¡•Šg’£ƒTƒ|[ƒg
+  Get width status.
+    return: if not zero, has width extension support.
 
 UINT scrnmng_getbpp(void)
-  ƒXƒNƒŠ[ƒ“Fƒrƒbƒg”‚Ìæ“¾
-    return: ƒrƒbƒg”(8/16/24/32)
+  Get screen bit color value.
+    return: bit(8/16/24/32)
 
 void scrnmng_palchanged(void)
-  ƒpƒŒƒbƒgXV‚Ì’Ê’m(8bitƒXƒNƒŠ[ƒ“ƒTƒ|[ƒg‚Ì‚İ)
+  Palette update notification (only when 8bit screen is supported).
 
 RGB16 scrnmng_makepal16(RGB32 pal32)
-  RGB32‚©‚ç 16bitF‚ğì¬‚·‚éB(16bitƒXƒNƒŠ[ƒ“ƒTƒ|[ƒg‚Ì‚İ)
+  Draw from RGB32 to 16bit color (only when 16bit screen is supported).
 
 
 
 // ---- sound
 
-NP2‚ÌƒTƒEƒ“ƒhƒf[ƒ^‚Í sound.c‚ÌˆÈ‰º‚ÌŠÖ”‚æ‚èæ“¾
+NP2 sound data functions bellow can be obtained from sound.c.
   const SINT32 *sound_pcmlock(void)
   void sound_pcmunlock(const SINT32 *hdl)
 
 
-SOUND_CRITICAL  ƒZƒ}ƒtƒH‚ğ“ü‚ê‚é(see sndcsec.c)
-SOUNDRESERVE    —\–ñƒoƒbƒtƒ@‚ÌƒTƒCƒY(ƒ~ƒŠ•b)
-  ƒTƒEƒ“ƒh‚ğŠ„‚è‚İˆ—‚·‚éê‡‚Ìw’èB
-  Š„‚è‚İ‚ÌÅ‘å‰„‘ØŠÔ‚ğSOUNDRESERVE‚Åw’èB
-  (Win9x‚Ìê‡A©‘O‚ÅƒŠƒ“ƒOƒoƒbƒtƒ@‚ğŒ©’£‚é‚Ì‚Å Š„‚è‚İ–³‚µEw’èŠÔ’Ê‚è‚É
-  ƒTƒEƒ“ƒhƒ‰ƒCƒg‚ª—ˆ‚é‚Ì‚ÅA‚±‚Ìˆ—‚Í•s—v‚¾‚Á‚½)
+SOUND_CRITICAL  to insert a semaphore (see sndcsec.c).
+SOUNDRESERVE    buffer size reservation (milliseconds).
+  Assigned to fix sound crackling.
+  If there is big delay in queue jumping use SOUNDRESERVE.
+  (In the case of Win9x, it took care of watching after the ring buffer by itself, 
+  checking regularly without break if the "sound writer" was comming. 
+  It wasn't necessary to deal with that.)
 
 
 UINT soundmng_create(UINT rate, UINT ms)
-  ƒTƒEƒ“ƒhƒXƒgƒŠ[ƒ€‚ÌŠm•Û
-    input:  rate    ƒTƒ“ƒvƒŠƒ“ƒOƒŒ[ƒg(11025/22050/44100)
-            ms      ƒTƒ“ƒvƒŠƒ“ƒOƒoƒbƒtƒ@ƒTƒCƒY(ƒ~ƒŠ•b)
-    return: Šl“¾‚µ‚½ƒoƒbƒtƒ@‚ÌƒTƒ“ƒvƒŠƒ“ƒO”
+  Sound stream reservation.
+    input:  rate    Sampling rate (11025/22050/44100).
+            ms      Sampling buffer size (milliseconds).
+    return: Sampling amount of acquired buffer.
 
-            ms‚É]‚¤•K—v‚Í‚È‚¢(SDL‚Æ‚©ƒoƒbƒtƒ@ƒTƒCƒY‚ªŒÀ’è‚³‚ê‚é‚Ì‚Å)
-            NP2‚ÌƒTƒEƒ“ƒhƒoƒbƒtƒ@‘€ì‚Í •Ô‚è’l‚Ì‚İ‚ğ—˜—p‚µ‚Ä‚¢‚Ü‚·B
+            ms isn't obligatory (such things as SDL limit the buffer size).
+            NP2 sound buffer processing uses the return value.
 
 
 void soundmng_destroy(void)
-  ƒTƒEƒ“ƒhƒXƒgƒŠ[ƒ€‚ÌI—¹
+  End sound stream.
 
 void soundmng_reset(void)
-  ƒTƒEƒ“ƒhƒXƒgƒŠ[ƒ€‚ÌƒŠƒZƒbƒg
+  Reset sound stream.
 
 void soundmng_play(void)
-  ƒTƒEƒ“ƒhƒXƒgƒŠ[ƒ€‚ÌÄ¶
+  Sound stream playback.
 
 void soundmng_stop(void)
-  ƒTƒEƒ“ƒhƒXƒgƒŠ[ƒ€‚Ì’â~
+  Interrupt sound stream.
 
 void soundmng_sync(void)
-  ƒTƒEƒ“ƒhƒXƒgƒŠ[ƒ€‚ÌƒR[ƒ‹ƒoƒbƒN
+  Sound stream callback.
 
 void soundmng_setreverse(BOOL reverse)
-  ƒTƒEƒ“ƒhƒXƒgƒŠ[ƒ€‚Ìo—Í”½“]İ’è
-    input:  reverse ”ñ0‚Å¶‰E”½“]
+  Reverse sound stream output.
+    input:  reverse If not 0, reverse left/right.
 
 BOOL soundmng_pcmplay(UINT num, BOOL loop)
-  PCMÄ¶
-    input:  num     PCM”Ô†
-            loop    ”ñ0‚Åƒ‹[ƒv
+  PCM playback.
+    input:  num     PCM number.
+            loop    If not 0, loop.
 
 void soundmng_pcmstop(UINT num)
-  PCM’â~
-    input:  num     PCM”Ô†
+  PCM interruption.
+    input:  num     PCM number.
 
 
 
 // ---- mouse
 
 BYTE mousemng_getstat(SINT16 *x, SINT16 *y, int clear)
-  ƒ}ƒEƒX‚Ìó‘Ôæ“¾
-    input:  clear   ”ñ0‚Å ó‘Ô‚ğæ“¾Œã‚ÉƒJƒEƒ“ƒ^‚ğƒŠƒZƒbƒg‚·‚é
-    output: *x      clear‚©‚ç‚Ìx•ûŒüƒJƒEƒ“ƒg
-            *y      clear‚©‚ç‚Ìy•ûŒüƒJƒEƒ“ƒg
-    return: bit7    ¶ƒ{ƒ^ƒ“‚Ìó‘Ô (0:‰Ÿ‰º)
-            bit5    ‰Eƒ{ƒ^ƒ“‚Ìó‘Ô (0:‰Ÿ‰º)
+  Get mouse state.
+    input:  clear   If not 0, reset the counter after getting the mouse state.
+    output: *x      Count X-axis mouse movement since "clear".
+            *y      Count Y-axis mouse movement since "clear".
+    return: bit7    Left click status (0:pressed down)
+            bit5    Right click status (0:pressed down)
 
 
 
 // ---- serial/parallel/midi
 
 COMMNG commng_create(UINT device)
-  ƒVƒŠƒAƒ‹ƒI[ƒvƒ“
-    input:  ƒfƒoƒCƒX”Ô†
-    return: ƒnƒ“ƒhƒ‹ (¸”sNULL)
+  Open serial.
+    input:  Device number.
+    return: Handle (NULL if fails).
 
 
 void commng_destroy(COMMNG hdl)
-  ƒVƒŠƒAƒ‹ƒNƒ[ƒY
-    input:  ƒnƒ“ƒhƒ‹ (¸”sNULL)
+  Close serial.
+    input:  Handle (NULL if fails).
 
 
 
 // ---- joy stick
 
 BYTE joymng_getstat(void)
-  ƒWƒ‡ƒCƒXƒeƒBƒbƒN‚Ìó‘Ôæ“¾
+  Get joystick status.
 
-    return: bit0    ãƒ{ƒ^ƒ“‚Ìó‘Ô (0:‰Ÿ‰º)
-            bit1    ‰ºƒ{ƒ^ƒ“‚Ìó‘Ô
-            bit2    ¶ƒ{ƒ^ƒ“‚Ìó‘Ô
-            bit3    ‰Eƒ{ƒ^ƒ“‚Ìó‘Ô
-            bit4    ˜AËƒ{ƒ^ƒ“‚P‚Ìó‘Ô
-            bit5    ˜AËƒ{ƒ^ƒ“‚Q‚Ìó‘Ô
-            bit6    ƒ{ƒ^ƒ“‚P‚Ìó‘Ô
-            bit7    ƒ{ƒ^ƒ“‚Q‚Ìó‘Ô
+    return: bit0    UP state (0:pressed down).
+            bit1    DOWN
+            bit2    LEFT
+            bit3    RIGHT
+            bit4    Rapid-fire Button 1
+            bit5    Rapid-fire Button 2
+            bit6    Button 1
+            bit7    Button 2
 
 
 // ----
 
 void sysmng_update(UINT bitmap)
-  ó‘Ô‚ª•Ï‰»‚µ‚½ê‡‚ÉƒR[ƒ‹‚³‚ê‚éB
+  Called at state change.
 
 void sysmng_cpureset(void)
-  ƒŠƒZƒbƒg‚ÉƒR[ƒ‹‚³‚ê‚é
+  Called at Reset time.
 
 
 
 void taskmng_exit(void)
-  ƒVƒXƒeƒ€‚ğI—¹‚·‚éB
+  System termination.
 

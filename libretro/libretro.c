@@ -16,6 +16,7 @@
 #include "sysmng.h"
 #include "taskmng.h"
 #include "joymng.h"
+#include "mousemng.h"
 #include "ini.h"
 #include "pccore.h"
 #include "iocore.h"
@@ -416,9 +417,11 @@ void update_input(void)
 				sysmenu_menuopen(0, 0, 0);
 				mposx=0;mposy=0;
 				lastx=0;lasty=0;
+				mousemng_disable(MOUSEPROC_SYSTEM);
 			}
 			else {
 				menubase_close();
+				mousemng_enable(MOUSEPROC_SYSTEM);
 			}
 
    		memcpy(Core_old_Key_Sate,Core_Key_Sate , sizeof(Core_Key_Sate) );
@@ -427,7 +430,12 @@ void update_input(void)
 
 	      	int mouse_x = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_X);
 		int mouse_y = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_Y);
-		
+
+		if (!mousemng.flag){
+			//printf("ddd\n");
+			mousemng_sync(mouse_x,mouse_y);
+		}
+
 		mposx+=mouse_x;if(mposx<0)mposx=0;if(mposx>=retrow)mposx=retrow-1;
 		mposy+=mouse_y;if(mposy<0)mposy=0;if(mposy>=retroh)mposy=retroh-1;
 
@@ -448,29 +456,33 @@ void update_input(void)
 			{
 				menubase_moving(mposx, mposy, 1);
 			}
+			else mousemng_buttonevent(MOUSEMNG_LEFTDOWN);
+			
 		}
    		else if(mbL==1 && !mouse_l)
    		{
    			mbL=0;
-
-			if (menuvram != NULL)
+			if (!mousemng_buttonevent(MOUSEMNG_LEFTUP))
 			{
-				menubase_moving(mposx, mposy, 2);
-			}
-			else
-			{
-				sysmenu_menuopen(0, mposx, mposy);
+				if (menuvram != NULL)
+				{
+					menubase_moving(mposx, mposy, 2);
+				}
+				else
+				{
+					sysmenu_menuopen(0, mposx, mposy);
+				}
 			}
 
 		}
   	        if(mbR==0 && mouse_r){
       			mbR=1;		
-			
+			mousemng_buttonevent(MOUSEMNG_RIGHTDOWN);
 		}
    		else if(mbR==1 && !mouse_r)
    		{
    			mbR=0;
-			
+			mousemng_buttonevent(MOUSEMNG_RIGHTUP);
 		}
 
 		lastx=mposx;lasty=mposy;
@@ -687,6 +699,7 @@ void retro_run(void)
    if(firstcall)
    {
       pre_main(RPATH);
+      mousemng_enable(MOUSEPROC_SYSTEM);
       firstcall=0;
       printf("INIT done\n");
       return;

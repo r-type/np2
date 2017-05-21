@@ -13,10 +13,10 @@ enum
 	JOY_RIGHT_BIT	= 0x08,
 	JOY_UP_BIT	= 0x01,
 	JOY_DOWN_BIT	= 0x02,
-	JOY_BTN1_BIT	= 0x40,
+	JOY_BTN1_BIT	= 0x10,
 	JOY_BTN2_BIT	= 0x20,
-	JOY_BTN3_BIT	= 0x80,
-	JOY_BTN4_BIT	= 0x10
+	JOY_BTN3_BIT	= 0x40,
+	JOY_BTN4_BIT	= 0x80
 };
 
 void joymng_sync()

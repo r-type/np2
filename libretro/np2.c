@@ -181,6 +181,7 @@ int np2_main(int argc, char *argv[]) {
 	if (fontmng_init() != SUCCESS) {
 		goto np2main_err2;
 	}
+	mousemng_initialize();
 	sdlkbd_initialize();
 	inputmng_init();
 	keystat_initialize();

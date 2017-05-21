@@ -222,6 +222,7 @@ int pre_main(const char *argv)
    for (i = 0; i < PARAMCOUNT; i++)
    {
       xargv_cmd[i] = (char*)(XARGV[i]);
+      printf("arg_%d:%s\n",i,xargv_cmd[i]);
    }
 
    char tmppath[4096]; 
@@ -431,8 +432,7 @@ void update_input(void)
 	      	int mouse_x = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_X);
 		int mouse_y = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_Y);
 
-		if (!mousemng.flag){
-			//printf("ddd\n");
+		if (!mousemng.flag){			
 			mousemng_sync(mouse_x,mouse_y);
 		}
 
@@ -505,10 +505,10 @@ static void keyboard_cb(bool down, unsigned keycode, uint32_t character, uint16_
 void retro_get_system_info(struct retro_system_info *info)
 {
    memset(info, 0, sizeof(*info));
-   info->library_name = "np2";
-   info->library_version = "0.60";
+   info->library_name = "np21";
+   info->library_version = "0.86";
    info->need_fullpath = true;
-   info->valid_extensions = "d98|zip|98d|fdi|2hd|tfd|d88|88d|hdm|xdf|dup|cmd|hdi|thd|nhd|hdd";
+   info->valid_extensions = "d98|zip|98d|fdi|fdd|2hd|tfd|d88|88d|hdm|xdf|dup|cmd|hdi|thd|nhd|hdd";
 }
 
 void retro_get_system_av_info(struct retro_system_av_info *info)

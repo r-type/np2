@@ -113,7 +113,7 @@ char* get_file_ext(char* filepath){
    return filepath + strlen(filepath) - 3;
 }
 
-//d88 88d d98 98d fdi xdf hdm dup 2hd tfd
+//d88 88d d98 98d fdi fdd xdf hdm dup 2hd tfd
 //thd nhd hdi hdd
 
 int np2_main(int argc, char *argv[]) {
@@ -121,8 +121,8 @@ int np2_main(int argc, char *argv[]) {
 	int		pos;
 	char	*p;
 	int		id;
-
-        int load_floppy=0;
+       
+	int loaddisk[8]={-1,-1,-1,-1,-1,-1,-1,-1};
 
 	pos = 1;
 	while(pos < argc) {
@@ -140,7 +140,8 @@ int np2_main(int argc, char *argv[]) {
 			strcmp(get_file_ext(p), "hdd") == 0 ||\
 			strcmp(get_file_ext(p), "HDD") == 0  )
 	        {
-			load_floppy=2; break;
+			printf("POS:%d (%s)\n",pos-2,p);
+			loaddisk[pos-2]=4+pos-2; //break;
 		}
 		else if(strcmp(get_file_ext(p), "88d") == 0 ||\
 			strcmp(get_file_ext(p), "88D") == 0 ||\
@@ -150,6 +151,8 @@ int np2_main(int argc, char *argv[]) {
 			strcmp(get_file_ext(p), "98D") == 0 ||\
 			strcmp(get_file_ext(p), "fdi") == 0 ||\
 			strcmp(get_file_ext(p), "FDI") == 0 ||\
+			strcmp(get_file_ext(p), "fdd") == 0 ||\
+			strcmp(get_file_ext(p), "FDD") == 0 ||\
 			strcmp(get_file_ext(p), "xdf") == 0 ||\
 			strcmp(get_file_ext(p), "XDF") == 0 ||\
 			strcmp(get_file_ext(p), "hdm") == 0 ||\
@@ -163,12 +166,12 @@ int np2_main(int argc, char *argv[]) {
 			strcmp(get_file_ext(p), "d88") == 0 ||\
 			strcmp(get_file_ext(p), "D88") == 0 )
 	        {
-			load_floppy=1; break;
+			printf("POS:%d (%s)\n",pos-2,p);
+			loaddisk[pos-2]=pos-2;//load_floppy=p-1; break;
 		}
-
 		else {
 			printf("error command: %s\n", p);
-			goto np2main_err1;
+			//goto np2main_err1;
 		}
 	}
 
@@ -205,8 +208,16 @@ int np2_main(int argc, char *argv[]) {
 	scrndraw_redraw();
 	pccore_reset();
 
-	if(load_floppy==1)diskdrv_setfdd(0,p, 0/*read_only*/);
-	else if(load_floppy==2)diskdrv_setsxsi(0 /*drive_num*/, p);
+	for(pos=0;pos<argc;pos++)
+		if(loaddisk[pos]!=-1 && loaddisk[pos]<4){
+			printf("load disk (%s) in drive %d \n",argv[pos+1],pos);
+			diskdrv_setfdd(pos,argv[pos+1], 0/*read_only*/);
+		}
+		else if(loaddisk[pos]!=-1 && loaddisk[pos]>3){
+			printf("load harddrive (%s) in drive %d \n",argv[pos+1],pos);
+			diskdrv_setsxsi(pos /*drive_num*/, argv[pos+1]);
+		}
+
 #if defined(SUPPORT_RESUME)
 	if (np2oscfg.resume) {
 		id = flagload(str_sav, str_resume, FALSE);

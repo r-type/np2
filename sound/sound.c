@@ -174,7 +174,7 @@ static void streamfilewrite(PSNDSTREAM sndstream, UINT nSamples)
 			{
 				nSample = -32768;
 			}
-			/* little endian‚È‚Ì‚Å satuation_s16‚Íg‚¦‚È‚¢ */
+			/* little endianãªã®ã§ satuation_s16ã¯ä½¿ãˆãªã„ */
 			buf[i][0] = (UINT8)nSample;
 			buf[i][1] = (UINT8)(nSample >> 8);
 		}
@@ -260,6 +260,11 @@ BRESULT sound_create(UINT rate, UINT ms)
 #else
 	reserve = 0;
 #endif
+#ifdef __LIBRETRO__
+	reserve=0;
+	samples=735;
+#endif
+
 	s_sndstream.buffer = (SINT32 *)_MALLOC((samples + reserve) * 2 * sizeof(SINT32), "stream");
 	if (s_sndstream.buffer == NULL)
 	{
@@ -317,11 +322,11 @@ void sound_changeclock(void)
 		return;
 	}
 
-	/* ‚Æ‚è‚ ‚¦‚¸ 25‚ÅŠ„‚èØ‚ê‚éB */
+	/* ã¨ã‚Šã‚ãˆãš 25ã§å‰²ã‚Šåˆ‡ã‚Œã‚‹ã€‚ */
 	clk = pccore.realclock / 25;
 	hz = soundcfg.rate / 25;
 
-	/* ‚ÅAƒNƒƒbƒN”‚É‡‚¹‚Ä’²®B(64bit‰‰Z‚µ‚ë‚æ‚È“I) */
+	/* ã§ã€ã‚¯ãƒ­ãƒƒã‚¯æ•°ã«åˆã›ã¦èª¿æ•´ã€‚(64bitæ¼”ç®—ã—ã‚ã‚ˆãªçš„) */
 	hzmax = (1 << (32 - 8)) / (clk >> 8);
 	while (hzmax < hz)
 	{
@@ -394,8 +399,8 @@ void sound_sync(void)
 static volatile int locks = 0;
 
 /**
- * PCM ƒoƒbƒtƒ@‚ğ“¾‚é (ƒtƒŒ[ƒ€ƒ[ƒN‚©‚çŒÄ‚Î‚ê‚é)
- * @return ƒoƒbƒtƒ@
+ * PCM ãƒãƒƒãƒ•ã‚¡ã‚’å¾—ã‚‹ (ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¯ãƒ¼ã‚¯ã‹ã‚‰å‘¼ã°ã‚Œã‚‹)
+ * @return ãƒãƒƒãƒ•ã‚¡
  */
 const SINT32 *sound_pcmlock(void)
 {
@@ -435,8 +440,8 @@ const SINT32 *sound_pcmlock(void)
 }
 
 /**
- * PCM ƒoƒbƒtƒ@‚ğ‰ğ•ú‚·‚é
- * @param[in] hdl ƒoƒbƒtƒ@
+ * PCM ãƒãƒƒãƒ•ã‚¡ã‚’è§£æ”¾ã™ã‚‹
+ * @param[in] hdl ãƒãƒƒãƒ•ã‚¡
  */
 void sound_pcmunlock(const SINT32 *hdl)
 {
